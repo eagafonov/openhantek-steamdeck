@@ -1,0 +1,3 @@
+[submodule "openhantek"]
+	path = openhantek
+	url = https://github.com/OpenHantek/openhantek.git
