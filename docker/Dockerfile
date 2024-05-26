@@ -1,13 +1,14 @@
-FROM archlinux
+FROM spkane/steamdeck-holo-base
 
 RUN pacman --sync --refresh --noconfirm \
     bash-completion \
     cmake \
+    fftw \
     gcc \
     glibc \
-    make \
-    fftw \
     icu \
+    libusb \
+    make \
     qt5-base
 
 ARG DEV_UID=1000
