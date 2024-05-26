@@ -26,8 +26,8 @@ RUN:=docker run --rm -it \
 run-shell:
 	${RUN} bash
 
-run-build:
-	${RUN} make build
+run-%:
+	${RUN} make $(subst run-,,$@)
 
 #########################################
 # Command to run in the devenv container
@@ -52,3 +52,28 @@ ${BUILD_DIR}:
 
 build: .check-devenv-container ${BUILD_DIR}/Makefile
 	make -C ${BUILD_DIR} -j10
+
+################
+# Misc commands
+################
+
+STEAMDECK_HOST?=steamdeck
+
+PACKAGE_DIR:=$(shell pwd)/package/openhantek
+SCRIPTS_DIR:=$(shell pwd)/scripts
+
+package: .check-devenv-container
+	-rm -rf ${PACKAGE_DIR}
+	mkdir -p ${PACKAGE_DIR}/{bin,lib}
+
+	chmod +x ${SCRIPTS_DIR}/openhantek.sh
+
+	cp ${BUILD_DIR}/openhantek/OpenHantek \
+		${PACKAGE_DIR}/bin
+
+	cp /usr/lib/libfftw3.so.* ${PACKAGE_DIR}/lib
+
+	cp -r ${SCRIPTS_DIR}/openhantek.sh ${PACKAGE_DIR}
+
+send-to-steamdeck:
+	rsync -avz ${PACKAGE_DIR}/ deck@${STEAMDECK_HOST}:openhantek
