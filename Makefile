@@ -1,3 +1,5 @@
+all: image run-build
+
 IMAGE_TAG:=localhost:5000/openhuntek-steamdec/devenv
 
 # Command to build/test the devenv container
